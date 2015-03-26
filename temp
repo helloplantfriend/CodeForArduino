@@ -1,0 +1,40 @@
+ void TempSensor() {
+  smoothing();
+//Serial.print("average is: ");
+// Serial.println(average);
+
+  float voltage = (average/1024.0) * 5.0;
+  float temperature = (voltage - 0.5) * 100; 
+  
+    if(abs(temperature - ptemperature) > temptTreshold) {
+//        Serial.print(temperature);
+//        Serial.print(" - ");
+//        Serial.println();
+     {
+    if(temperature < lowTemp || temperature > highTemp) {
+      tempVal = servoTempLow;
+      tempServo.write(tempVal);
+//      Serial.println("temp low");
+      sadMove(tempServo,2,30);
+//      Serial.println("SadMove");
+    } 
+    else  if(temperature > lowTemp && temperature < highTemp) {
+      tempVal = servoTempHigh;
+      tempServo.write(tempVal);
+//        Serial.println("temp high");
+      victoryMove(tempServo,3,20,30);
+//        Serial.println("vitoryMove");
+    }
+  }
+  ptemperature = temperature;
+  }
+}
+
+void smoothing() {
+  total = 0;
+  for (int i = 0; i < numReadings; i++) {
+    total = total + analogRead(tempPin); 
+//   // Serial.println(analogRead(tempPin));
+  }    
+  average = total / numReadings;
+}
