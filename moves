@@ -1,0 +1,66 @@
+
+// This function takes the parameters number of Times and the max Angle you want the servos to move to show happy mood
+void happyMove(int nrTimes, int maxAngle){
+  for(int i=0;i<nrTimes;i++){
+    for(int pos=0;pos<maxAngle;pos++){  //pos denotes the current position of the servo. It can take values between 0-180
+      moistServo.write(pos);
+      tempServo.write(pos);
+      lightServo.write(pos);
+      delay(10);
+    }
+    for(int pos=maxAngle;pos>0;pos--){
+      moistServo.write(pos);
+      tempServo.write(pos);
+      lightServo.write(pos);
+      delay(10);
+    }
+  }
+}
+
+// This function takes the parameters number of Times and the max Angle you want the servos to move to show sad mood.
+void sadMove(Servo servo,int nrTimes, int maxAngle){
+  //Sad Moves moist Servo
+  for(int i=0;i<nrTimes;i++){
+    for(int pos=0;pos<maxAngle;pos++){ //pos denotes the current position of the servo. It can take values between 0-180 
+      servo.write(pos);
+      delay(30);
+    }
+    for(int pos=maxAngle;pos>0;pos--){
+      servo.write(pos);
+      delay(30);
+    }
+  }
+}
+
+
+// This function takes the parameters number of Times and the max Angle you want the servos to move and adds easing Sine function sad mood
+void sadMoveWithEasing(Servo servo, int nrTimes, int maxAngle){
+  //Sad Moves moist Servo
+  for(int i=0;i<nrTimes;i++){
+    for(int pos=0;pos<maxAngle;pos++){ //pos denotes the current position of the servo. It can take values between 0-180 
+      servo.write(pos);
+      delay(2+20*sin(radians(pos)));
+    }
+    for(int pos=maxAngle;pos>0;pos--){
+      servo.write(pos);
+      delay(2+20*sin(radians(pos)));
+    }
+  }
+}
+
+void victoryMove(Servo servo,int nrTimes, int loopAngle, int maxAngle){
+  for(int i=0;i<nrTimes;i++){
+    for(int pos=0;pos<loopAngle;pos++){ //loop angle denotes the angle to which the servo repeats its movement before going to the maxAngle
+      servo.write(pos);
+      delay(10);
+    }
+    for(int pos=loopAngle;pos>0;pos--){ 
+      servo.write(pos);
+      delay(10);
+    }
+  }
+  for(int pos=0;pos<maxAngle;pos++){ 
+      servo.write(pos);
+      delay(30);
+    }
+}
