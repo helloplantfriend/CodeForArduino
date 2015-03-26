@@ -1,0 +1,39 @@
+void lightSensor () {
+
+  int lightSens = analogRead(lightPin);
+
+ Serial.print("lightsensor:");
+ Serial.print(" - ");
+ Serial.print(lightSens);
+ Serial.println();
+
+  if(lightSens < lowLight && pLightSens > lowLight) {
+      Serial.println("low light");
+    lightVal = servoLightLow;
+    lightServo.write(lightVal);
+    lowLightTime = millis();
+  }
+
+  pLightSens = lightSens;
+
+  if(lightSens < lowLight && (millis()-lowLightTime)>=lowLightInterval){
+    Serial.println("start counting Light");
+    sadMove(lightServo,2,70);
+    Serial.println(" Light SadMove");
+  } 
+
+    if(lightSens > highLight && nextLightSens < highLight) {
+    Serial.println("high light");
+    victoryMove(lightServo,3,20,70);
+    Serial.println("Light vitoryMove");
+    highLightTime = millis();
+   }
+   
+   nextLightSens = lightSens;
+    
+   if(lightSens > highLight ){
+    lightVal = servoLightHigh;
+    lightServo.write(lightVal);
+//    Serial.println("back to high Light");
+     }
+  }
