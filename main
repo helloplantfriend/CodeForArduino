@@ -1,0 +1,116 @@
+#include <Servo.h>
+
+const int lightPin = A0;
+const int light = 0;
+
+int lowLight = 400;
+int highLight = 700;
+int pLightSens = 0;
+int nextLightSens = 0;
+
+Servo lightServo;
+//int servoLightLow = 2;
+//int servoLightHigh = 42;
+int servoLightLow = 0;
+int servoLightHigh = 45;
+int lightVal;
+
+unsigned long lastLightTime = 0; //millis
+unsigned long lowLightTime = 0; //millis
+unsigned long highLightTime = 0; //millis
+
+const int lightInterval = 100;
+const int lowLightInterval = 5000;
+
+////////////////////////////
+
+const int moistPin = A1;
+const int moist = 1;
+
+int lowMoist = 30;
+int highMoist = 180;
+int pMoistSens = 0;
+int nextMoistSens = 0;
+
+Servo moistServo;
+//int servoMoistLow = 2;
+//int servoMoistHigh = 80;
+int servoMoistLow = 45;
+int servoMoistHigh = 0;
+int moistVal;
+
+unsigned long lastMoistTime = 0;
+unsigned long lowMoistTime = 0; //millis
+unsigned long highMoistTime = 0; //millis
+
+const int moistInterval = 1000;
+const int lowMoistInterval = 5000;
+
+////////////////////////////
+
+const int tempPin = A2;
+const int temp = 2;
+int tempVal = 2;
+int ptempVal = 2;
+int lowTemp = 18;
+int highTemp = 25;
+
+Servo tempServo;
+//int  servoTempLow = 100;
+//int  servoTempHigh = 3;
+int  servoTempLow = 45;
+int  servoTempHigh = 0;
+
+float temptTreshold = 0;
+float ptemperature = 0;
+
+const int numReadings = 10;
+int total = 0;
+int average = 0;
+
+unsigned long lastTempTime = 0;
+const int tempInterval = 1000;
+
+////////////////////////////
+
+void setup () { 
+  Serial.begin (9600);
+
+
+  moistServo.attach(3);
+  tempServo.attach(6);
+  lightServo.attach(9);
+
+  lightServo.write(lightVal);
+  moistServo.write(moistVal);
+  tempServo.write(tempVal);
+
+  pinMode (lightPin, INPUT);
+  pinMode (moistPin, INPUT);
+  pinMode (tempPin, INPUT);
+
+  //Call these when certain conditions are matched
+  happyMove(3,30);
+  sadMove(tempServo,2,30);
+  victoryMove(moistServo,3,28,30);
+  lastMoistTime = millis();
+  lastLightTime = millis();
+  lastTempTime = millis();
+}
+
+void loop (){
+  if (millis() - lastLightTime > lightInterval) {
+    //Serial.println("light");
+    lightSensor();
+    lastLightTime = millis();
+  }
+  if (millis() - lastMoistTime > moistInterval) {
+    MoistSensor();
+    lastMoistTime = millis();
+  }
+  if (millis() - lastTempTime > tempInterval) {
+    //Serial.println("temp");
+    TempSensor();
+    lastTempTime = millis();
+  }
+}
