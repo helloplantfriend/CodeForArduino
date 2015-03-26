@@ -1,0 +1,36 @@
+void MoistSensor() {
+
+//  Serial.println ("doing the moist");
+
+  int moistSens = analogRead(moistPin);
+//  Serial.println(moistSens);
+//  Serial.print("moist sensor:");
+//  Serial.print(" - ");
+//  Serial.println(moistSens);
+
+    if(moistSens < lowMoist && pMoistSens > lowMoist) {
+    moistVal = servoMoistLow;
+    moistServo.write(moistVal);
+//  Serial.println("moist low");
+    lowMoistTime=millis();
+//  Serial.println("start counting");
+}
+    pMoistSens = moistSens;
+    if(moistSens < lowMoist && (millis()-lowMoistTime)>=lowMoistInterval) {
+//    Serial.println("SadMove");
+    sadMove(moistServo,2,30);
+
+  } 
+    if(moistSens > highMoist && nextMoistSens < highMoist) {
+//  Serial.println("high moist");
+    victoryMove(moistServo,3,20,30);
+//  Serial.println("vitoryMove");
+    highMoistTime = millis();
+  }
+    nextMoistSens = moistSens;
+    if(moistSens > highMoist ){
+    moistVal = servoMoistHigh;
+    moistServo.write(moistVal);
+//  Serial.println("back to high");
+  }
+}
